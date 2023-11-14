@@ -37,14 +37,14 @@
 
 # consolidates (Consolidated version)
 :consolidates rdf:type owl:ObjectProperty ;
-	rdfs:label "Consolidates a standard.en ;
+	rdfs:label "Consolidates a standard."en ;
 	rdfs:domain fabio:TechnicalStandard ;
 	rdfs:range fabio:TechnicalStandard ;
 	.
 	
 # amends (Amendment)
 :amends rdf:type owl:ObjectProperty ;
-	rdfs:label "Amends a standard"@en ;
+	rdfs:label "Amends a standard."@en ;
 	rdfs:domain fabio:TechnicalStandard ;
 	rdfs:range fabio:TechnicalStandard ;
 	.
@@ -92,13 +92,13 @@
 	
 # merges_into 
 :mergesInto rdf:type owl:ObjectProperty ;
-	rdfs:label "Is merged into a standard"@en ;
+	rdfs:label "Is merged into a standard."@en ;
 	owl:inverseOf :merges ;
 	.
 	
 # revised_by
 :revisedBy rdf:type owl:ObjectProperty ;
-	rdfs:label "Is revised by a standard"@en ;
+	rdfs:label "Is revised by a standard."@en ;
 	owl:inverseOf :revises ;
 	.
 	
