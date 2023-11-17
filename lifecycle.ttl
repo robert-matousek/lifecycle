@@ -3,84 +3,97 @@
 @prefix rdf: <http://www.w3.org/1999/02/22-rdf-syntax-ns#> .
 @prefix rdfs: <http://www.w3.org/2000/01/rdf-schema#> .
 @prefix owl: <http://www.w3.org/2002/07/owl#> .
+@prefix sh: <http://www.w3.org/ns/shacl#> .
 
 ### A schema to take care of evolutionary changes of a standard.
 
+fabio:TechnicalStandard rdf:type sh:NodeShape ;
+	sh:property :StdRevises ;
+	.
+
+### CLASSES
+
+:Amendment rdf:type rdfs:Class, sh:NodeShape ;
+	rdfs:subClassOf fabio:TechnicalStandard ;
+	rdfs:label "Amendment of a technical standard."@en ;
+	sh:property :StdAmends ;
+	.
+
+:Corrigendum rdf:type rdfs:Class, sh:NodeShape ;
+	rdfs:subClassOf fabio:TechnicalStandard ;
+	rdfs:label "Correction of a technical standard."@en ;
+	sh:property :StdCorrects ;
+	.
+		
+:Consolidation rdf:type rdfs:Class, sh:NodeShape ;
+	rdfs:subClassOf fabio:TechnicalStandard ;
+	rdfs:label "Consolidated version."@en ;
+	sh:property :StdConsolidates, :StdIncludes ;
+	.
+
+:Draft rdf:type rdfs:Class, sh:NodeShape ;
+	rdfs:subClassOf fabio:Work ;
+	rdfs:label "Draft standard."@en ;
+	sh:property :StdWillRevise ;
+
+:Redline rdf:type rdfs:Class, sh:NodeShape ;
+	rdfs:subClassOf fabio:computerFile ;
+	rdfs:label "Redline version"@en ;
+	rdfs:comment "Shows the actual revisions made to an approved standard when a version changes."@en ;
+	sh:property :RedlineCompareSource, :RedlineCompareWith ;
+	.
+
 ### OBJECT PROPERTIES
 
-### BASED ON OTHER PUBLICATION
+# External
 
 # based_on
 :basedOn rdf:type owl:ObjectProperty ;
 	rdfs:label "Based on a publication from another SDO."@en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:Work ;
 	.
 
-### MAIN REVISION CYCLE
+# Main revision cycle
 
-# revises (Revision)
+# revises
 :revises a owl:ObjectProperty ;
 	rdfs:label "Revises a standard."@en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:TechnicalStandard ;
 	.
 
 # will_revise
 :willRevise rdf:type owl:ObjectProperty ;
 	rdfs:label "Will revise a standard."@en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:TechnicalStandard ;
 	.
 
-### EVOLUTIONS AND CHANGES
+### Evolutions and changes
 
-# consolidates (Consolidated version)
+# consolidates
 :consolidates rdf:type owl:ObjectProperty ;
-	rdfs:label "Consolidates a standard."en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:TechnicalStandard ;
+	rdfs:label "Consolidates a standard."@en ;
 	.
-	
-# amends (Amendment)
+		
+# amends 
 :amends rdf:type owl:ObjectProperty ;
 	rdfs:label "Amends a standard."@en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:TechnicalStandard ;
 	.
-
-# corrects (Corrigendum)
+	
+# corrects
 :corrects rdf:type owl:ObjectProperty ;
 	rdfs:label "Corrects a standard."@en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:TechnicalStandard ;
 	.
 
 # replaces
 :replaces rdf:type owl:ObjectProperty ;
 	rdfs:label "Replaces a standard."@en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:TechnicalStandard ;
 	.
-
+	
 # includes
 :includes rdf:type owl:ObjectProperty ;
 	rdfs:label "Includes a standard."@en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:TechnicalStandard ;
 	.
 
 # split_into
 :splitInto rdf:type owl:ObjectProperty ;
-	rdfs:label "Splits a standard into two or more standards."@en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:TechnicalStandard ;
-	.
-
-# split_from
-:splitFrom rdf:type owl:ObjectProperty ;
-	rdfs:label "Is a split from standard"@en ;
-	owl:inverseOf :splitInto ;
+	rdfs:label "Splits a standard into parts."@en ;
 	.
 	
 # merges
@@ -89,43 +102,156 @@
 	rdfs:domain fabio:TechnicalStandard ;
 	rdfs:range fabio:TechnicalStandard ;
 	.
-	
-# merges_into 
-:mergesInto rdf:type owl:ObjectProperty ;
-	rdfs:label "Is merged into a standard."@en ;
-	owl:inverseOf :merges ;
-	.
-	
-# revised_by
-:revisedBy rdf:type owl:ObjectProperty ;
-	rdfs:label "Is revised by a standard."@en ;
-	owl:inverseOf :revises ;
-	.
-	
-# reactivates (status: withdrawn)
+
+# reactivates (Status: withdrawn)
 :reactivates rdf:type owl:ObjectProperty ;
 	rdfs:label "Reactivates a standard."@en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:TechnicalStandard ;
 	.
-	
-### REDLINE
 
-:redline rdfs:subClassOf fabio:ComputerFile ;
+### Redline version
 
 # compare-source
 :compareSource rdf:type owl:ObjectProperty ;
 	rdfs:label "Compare to source document."@en ;
-	rdfs:domain :redline ;
-	rdfs:range fabio:TechnicalStandard ;
 	.
 
 # compare-with
-:compareSource rdf:type owl:ObjectProperty ;
+:compareWith rdf:type owl:ObjectProperty ;
 	rdfs:label "Compare with document."@en ;
-	rdfs:domain :redline ;
-	rdfs:range fabio:TechnicalStandard ;
 	.
+	
+### Inverse/reciprocal relations
+
+:amendedBy rdf:type owl:ObjectProperty ;
+	owl:inverseOf :amends ;
+	.
+
+:consolidatedBy rdf:type owl:ObjectProperty ;
+	owl:inverseOf :conslidates ;
+	.
+	
+:correctedBy rdf:type owl:ObjectProperty ;
+	owl:inverseOf :corrects ;
+	.
+	
+:mergedInto rdf:type owl:ObjectProperty ;
+	owl:inverseOf :merges ;
+	.
+
+:replacedBy rdf:type owl:ObjectProperty ;
+	owl:inverseOf :replaces ;
+	.
+
+:revisedBy rdf:type owl:ObjectProperty ;
+	owl:inverseOf :revises ;
+	.
+
+:splitFrom rdf:type owl:ObjectProperty ;
+	owl:inverseOf :splitInto ;
+	.	
+
+:willBeRevisedBy rdf:type owl:ObjectProperty ;
+	owl:inverseOf :willRevise ;
+	.
+
+
+### PROPERTY SHAPES
+
+:StdBasedOn rdf:type sh:PropertyShape ;
+	sh:path :basedOn ;
+	sh:class fabio:Work ;
+	.
+
+:StdRevises rdf:type sh:PropertyShape ;
+	sh:path :revises ;
+	sh:class fabio:TechnicalStandard ;
+	sh:maxCount 1 ;
+	.
+
+:StdWillRevise rdf:type sh:PropertyShape ;
+	sh:path :willRevise ;
+	sh:class fabio:TechnicalStandard ;
+	sh:maxCount 1 ;
+	.
+
+:StdRevisedBy rdf:type sh:PropertyShape ;
+	sh:path :revisedBy ;
+	sh:class fabio:TechnicalStandard ;
+	sh:maxCount 1 ;
+	.
+
+:StdCorrects rdf:type sh:PropertyShape ;
+	sh:path :corrects ;
+	sh:class fabio:TechnicalStandard ;
+	sh:maxCount 1 ;
+	.
+
+:StdAmends rdf:type sh:PropertyShape ;
+	sh:path :amends ;
+	sh:class fabio:TechnicalStandard ;
+	sh:maxCount 1 ;
+	.
+ 
+:StdConsolidates rdf:type sh:PropertyShape ;
+	sh:path :conslidates ;
+	sh:class fabio:TechnicalStandard ;
+	sh:minCount 1 ;
+	.
+
+:StdIncludes rdf:type sh:PropertyShape ;
+	sh:path :revisedBy ;
+	sh:class fabio:TechnicalStandard ;
+	sh:minCount 1 ;
+	.
+
+:StdReactivates rdf:type sh:PropertyShape ;
+	sh:path :reactivates ;
+	sh:class fabio:TechnicalStandard ;
+	sh:maxCount 1 ;
+	.
+	
+:StdMergesInto rdf:type sh:PropertyShape ;
+	sh:path :mergesInto ;
+	sh:class fabio:TechnicalStandard ;
+	sh:maxCount 1 ;
+	.
+	
+:StdMerges rdf:type sh:PropertyShape ;
+	sh:path :mergesInto ;
+	sh:class fabio:TechnicalStandard ;
+	sh:minCount 2 ;
+	.
+	
+:StdSplitFrom rdf:type sh:PropertyShape ;
+	sh:path :mergesInto ;
+	sh:class fabio:TechnicalStandard ;
+	sh:maxCount 1 ;
+	.
+	
+:StdSplitTo rdf:type sh:PropertyShape ;
+	sh:path :mergesInto ;
+	sh:class fabio:TechnicalStandard ;
+	sh:minCount 2 ;
+	.
+
+:StdReplaces rdf:type sh:PropertyShape ;
+	sh:path :mergesInto ;
+	sh:class fabio:TechnicalStandard ;
+	.
+
+:RedlineCompareSource rdf:type sh:PropertyShape ;
+	sh:path :compareSource ;
+	sh:class :fabio:TechnicalStandard ;
+	sh:minCount 1 ;
+	sh:maxCount 1 ;
+	.
+
+:RedlineCompareWith rdf:type sh:PropertyShape ;
+	sh:path :compareWith ;
+	sh:class :fabio:TechnicalStandard ;
+	sh:minCount 1 ;
+	sh:maxCount 1 ;
+	.	
 
 ### CROSS-SDO PROJECT RELATIONS
 
@@ -136,6 +262,3 @@
 # vienna-agreement
 
 # frankfurt-agreement
-
-
-
