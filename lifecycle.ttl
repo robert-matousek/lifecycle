@@ -99,8 +99,6 @@ fabio:TechnicalStandard rdf:type sh:NodeShape ;
 # merges
 :merges rdf:type owl:ObjectProperty ;
 	rdfs:label "Merges two or more standards."@en ;
-	rdfs:domain fabio:TechnicalStandard ;
-	rdfs:range fabio:TechnicalStandard ;
 	.
 
 # reactivates (Status: withdrawn)
